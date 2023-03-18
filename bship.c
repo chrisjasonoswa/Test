@@ -7,6 +7,7 @@ void initialize_board(char board[ROWS][COLUMNS]);
 void add_ship_onboard(int ship_index, char board[ROWS][COLUMNS], Placement placement, Ship ships[]);
 int check_sunk_ship(Ship ships[], int index, char board[ROWS][COLUMNS]);
 int shot_fired(Ship ships[], char board[ROWS][COLUMNS], int x, int y);
+int is_game_over(char board[ROWS][COLUMNS]);
 
 int main()
 {
@@ -19,7 +20,7 @@ int main()
 
     /**** Building Block 1 - Reading in the ship information ****/
     //Fill the ships array
-    intialize_ships(ships);
+    initialize_ships(ships);
 
     /**** Building Block 2 - Getting the ship placements ****/
     Placement placement; //placement info of each ship
@@ -43,6 +44,8 @@ int main()
         /**** Building Block 5 - Detecting when a ship is sunk ****/
         if(check_sunk_ship(ships, ship_index, board) == 0) //Memory is not availble, end the program
             break;
+        if(is_game_over(board)) //All ships has sunk
+            break
     }
     msg_end();
 }
@@ -75,7 +78,7 @@ int check_sunk_ship(Ship ships[], int index, char board[ROWS][COLUMNS])
     char* final_mssg = (char*)malloc(sizeof(char) * (50));
     if(final_mssg == NULL) //Memory not available
         return 0;
-
+    i = 0;
     int f_i = 0;
     //Adds the mssg to the final_mssg
     while(mssg[i] != '\0')
@@ -169,3 +172,18 @@ void initialize_board(char board[ROWS][COLUMNS])
             board[i][j] = 'X';
     }
 }
+
+int is_game_over(char board[ROWS][COLUMNS])
+{
+    int i, j ;
+    for(i = 0; i < ROWS; i++)
+    {
+        for(j = 0; j < COLUMNS; j++)
+        {
+            if(board[i][j] != 'X')
+                return 0;
+        }
+    }
+    return 1;
+}
+
